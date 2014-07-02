@@ -34,3 +34,14 @@ struct command
     struct command *subshell_command;
   } u;
 };
+
+struct command_stream{
+    //Holds commands
+    struct command* commands;
+    
+    //Number of commands
+    int stream_s;
+    
+    //Last command read
+    int pos;
+};
