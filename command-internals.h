@@ -9,6 +9,21 @@ enum command_type
     SIMPLE_COMMAND,      // a simple command
     SUBSHELL_COMMAND,    // ( A )
   };
+  
+  typedef enum token_type
+  {
+      WORD,
+      AND,
+      OR,
+      PIPE,
+      OPEN_P,  // '('
+      CLOSE_P, // ')'
+      LESS,
+      GREATER,
+      SEMI_COLON,
+      NEW_LINE,
+      EOF
+  }token_t;
 
 // Data associated with a command.
 struct command
@@ -36,12 +51,24 @@ struct command
 };
 
 struct command_stream{
-    //Holds commands
-    struct command* commands;
+    //To read characters
+    int (*getbyte) (void*);
+    void* arg;
     
-    //Number of commands
-    int stream_s;
+    //next character
+    int next;
     
-    //Last command read
-    int pos;
+    //line number
+    int line;
+    
+    //The current token
+    char*   curr_str;
+    token_t curr_tkn;
+    
+    //The next token
+    char*   next_str;
+    token_t next_tkn;
+    
+    //Length of a token string
+    int token_s;
 };
