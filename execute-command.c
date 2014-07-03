@@ -1,5 +1,11 @@
 // UCLA CS 111 Lab 1 command execution
 
+////////////////////////////////////
+//Authors:
+//  Shubham Joshi   :   504-134-654
+//  Derek Foster    :   504-146-063
+////////////////////////////////////
+
 #include "command.h"
 #include "command-internals.h"
 
