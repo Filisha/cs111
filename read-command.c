@@ -13,11 +13,31 @@
 //An invalid character to use as a null value
 #define NO_CHAR (-5)
 
-/* FIXME: You may need to add #include directives, macro definitions,
-   static function definitions, etc.  */
+//Read the next token
+//But do not pull it from the stream
+#define PEEK(s) (s->next_tkn)
 
-/* FIXME: Define the type 'struct command_stream' here.  This should
-   complete the incomplete type declaration in command.h.  */
+//read a character from the stream
+char read(command_stream_t s) {
+    char curr;
+    //If the stream has a character, consume it
+    if (s->next != NO_CHAR) {
+        curr = s->next;
+        s->next = NO_CHAR;
+    }
+    //Else directly read it in from getbyte
+    else
+        curr = s->getbyte(s->arg);
+    return curr;
+}
+
+void reallocate(command_stream_t s)
+{
+    s->token_s += 64;
+    
+    s->curr_str = checked_realloc(s->curr_str, s->token_s * sizeof(char));
+    s->next_str = checked_realloc(s->next_str, s->token_s * sizeof(char));
+}
 
 command_stream_t
 make_command_stream(int (*get_next_byte) (void *),
@@ -42,19 +62,15 @@ make_command_stream(int (*get_next_byte) (void *),
     return stream;
 }
 
-
-
-char read(command_stream_t s) {
-    char curr;
-    //If the stream has a character, consume it
-    if (s->next != NO_CHAR) {
-        curr = s->next;
-        s->next = NO_CHAR;
-    }
-    //Else directly read it in from getbyte
-    else
-        curr = s->getbyte(s->arg);
-    return curr;
+bool iswordcharacter(char c){
+    bool isnum = '0' <= c && c <= '9';
+    bool isloweralpha = 'a' <= c && c <= 'z';
+    bool isupperalpha = 'A' <= c && c <= 'Z';
+    bool ispunct = c == '!' || c == '+' || c == '%' || c == '^' || c == '.' ||
+            c == '-' || c == ',' || c == '@' || c == '/' || 
+            c == ':' || c == '_';
+    
+    return isnum || isloweralpha || isupperalpha || ispunct;
 }
 
 command_t next(command_stream_t s) {
@@ -73,22 +89,48 @@ command_t next(command_stream_t s) {
         //Read the next character
         curr = read(s);
 
+        //Break at end of file
         if(curr == EOF || curr == NO_CHAR){
             s->next_tkn = END;
+            break;
         }
         //Ignore leading whitespace
         else if (curr == ' ' || curr == '\t') continue;
+        //Ignore comments
         else if (curr == '#'){
-            //ignore comments
             while((curr = read(s)) != '\n') continue;
             s->next = curr;//do not ignore the newline character
+        }
+        else if (iswordcharacter(curr)){
+            next[pos] = curr;
+            //Consume characters until token ends
+            while(char = read(s))
+            {
+                if(!iswordcharacter(curr))
+                {
+                    s->next = curr;//do not skip the current character
+                    break;
+                }
+                if(pos >= s->token_s)
+                {
+                    reallocate(s);
+                    next = s->next_str;
+                }
+                next[pos] = curr;
+                pos++;
+            }
+            if(pos >= s->token_s)
+            {
+                reallocate(s);
+                next = s->next_str;
+            }
+            next[pos] = 0;
+            s->next_tkn = WORD;
+            break;
         }
     }
 }
 
-//Read the next token
-//But do not pull it from the stream
-#define PEEK(s) (s->next_tkn)
 command_t
 read_command_stream(command_stream_t s) {
     if (PEEK(s) == END)
