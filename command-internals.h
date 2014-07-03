@@ -20,7 +20,7 @@ enum command_type
       CLOSE_P, // ')'
       LESS,
       GREATER,
-      SEMI_COLON,
+      SEMICOLON,
       NEW_LINE,
       END
   }token_t;

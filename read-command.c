@@ -125,7 +125,7 @@ command_t next(command_stream_t s) {
                 reallocate(s);
                 next = s->next_str;
             }
-            next[pos] = 0;
+            next[pos] = '\0';
             s->next_tkn = WORD;
             break;
         }
@@ -140,12 +140,96 @@ command_t next(command_stream_t s) {
             } else {
                 next[pos] = curr;
                 pos++;
-                next[pos] = 0;
+                next[pos] = '\0';
                 s->next_tkn = AND;
                 break;
             }
         }
+        
+        //Differentiate between PIPE (|) and OR (||) commands
+        else if (curr == '|') {
+            next[pos] = curr;
+            pos++;
+            if ((curr = read(s)) == '|') {
+                next[pos] = curr;
+                pos++;
+                next[pos] = '\0';
+                s->next_tkn = OR;
+                break;
+            } else {
+                //Read a pipe, push the last character back
+                s->next = curr;
+                next[pos] = '\0';
+                s->next_tkn = PIPE;
+                break;
+            }
+        }
+        
+        //Open and close parenthesis
+        else if (curr == '(') {
+            next[pos] = curr;
+            pos++;
+            next[pos] = '\0';
+            s->next_tkn = OPEN_P;
+            break;
+        } else if (curr == ')') {
+            next[pos] = curr;
+            pos++;
+            next[pos] = '\0';
+            s->next_tkn = CLOSE_P;
+            break;
+        }
+        
+        //IP/OP redirect
+        else if (curr == '<') {
+            next[pos] = curr;
+            pos++;
+            next[pos] = '\0';
+            s->next_tkn = LESS;
+            break;
+        } else if (curr == '>') {
+            next[pos] = curr;
+            pos++;
+            next[pos] = '\0';
+            s->next_tkn = GREATER;
+            break;
+        }
+        
+        //Semicolons
+        else if (curr == ';') {
+            next[pos] = curr;
+            pos++;
+            next[pos] = '\0';
+            s->next_tkn = SEMICOLON;
+            break;
+        }
+        
+        //Newlines
+        else if (curr == '\n') {
+            s->line++;
+            //Consume any subsequent newlines
+            while ((curr == read(s)) == '\n') s->line++;
+
+            if (curr == EOF) {
+                s->next_tkn = END;
+                break;
+            }
+
+            s->next = curr; //undo read of next line
+            next[pos] = ' ';
+            pos++;
+            next[pos] = '\0';
+            s->next_tkn = NEW_LINE;
+            break;
+        }
+        
+        //Any unrecognized character
+        else {
+            error(1, 0, "%d: Unrecognized or out of place character", s->line);
+            break;
+        }
     }
+    return s->curr_tkn;
 }
 
 command_t
