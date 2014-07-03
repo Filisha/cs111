@@ -3,14 +3,14 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>lab1-Skeleton</name>
+            <name>cs111</name>
             <c-extensions>c</c-extensions>
             <cpp-extensions/>
             <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
             <make-dep-projects/>
             <sourceRootList>
-                <sourceRootElem>C:\Users\Shubham\Documents\lab1-Skeleton</sourceRootElem>
+                <sourceRootElem>C:\Users\Shubham\Documents\NetBeansProjects\cs111</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
