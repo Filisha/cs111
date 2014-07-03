@@ -18,8 +18,8 @@ enum command_type
       PIPE,
       OPEN_P,  // '('
       CLOSE_P, // ')'
-      LESS,
-      GREATER,
+      IP_REDIRECT,
+      OP_REDIRECT,
       SEMICOLON,
       NEW_LINE,
       END

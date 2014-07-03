@@ -72,7 +72,7 @@ bool iswordcharacter(char c) {
     return isnum || isloweralpha || isupperalpha || ispunct;
 }
 
-command_t next(command_stream_t s) {
+token_t next(command_stream_t s) {
     char* next = s->next_str;
 
     //Move the next token to the current one
@@ -108,7 +108,7 @@ command_t next(command_stream_t s) {
             next[pos] = curr;
             pos++;
             //Consume characters until token ends
-            while (char = read(s)) {
+            while ((curr = read(s))) {
                 if (!iswordcharacter(curr)) {
                     s->next = curr; //do not skip the current character
                     break;
@@ -185,13 +185,13 @@ command_t next(command_stream_t s) {
             next[pos] = curr;
             pos++;
             next[pos] = '\0';
-            s->next_tkn = LESS;
+            s->next_tkn = IP_REDIRECT;
             break;
         } else if (curr == '>') {
             next[pos] = curr;
             pos++;
             next[pos] = '\0';
-            s->next_tkn = GREATER;
+            s->next_tkn = OP_REDIRECT;
             break;
         }
         
@@ -232,9 +232,106 @@ command_t next(command_stream_t s) {
     return s->curr_tkn;
 }
 
+command_t parse_piped_command(command_stream_t s){
+    return NULL;
+}
+
+command_t parse_and_or_command(command_stream_t s) {
+    command_t first_c = parse_piped_command(s);
+    
+    while(PEEK(s) == AND || PEEK(s) == OR) {
+        token_t curr = next(s);
+    }
+    
+    return NULL;
+}
+
+command_t parse_complete_command(command_stream_t s){
+    command_t first_c = parse_and_or_command(s);
+    
+    while(PEEK(s) == NEW_LINE || PEEK(s) == SEMICOLON) {
+        next(s);
+        if(PEEK(s) == END) break;
+        command_t sequence_b = parse_and_or_command(s);
+        command_t sequence_c = checked_malloc(sizeof(struct command));
+        sequence_c->type = SEQUENCE_COMMAND;
+        sequence_c->status = -1;
+        sequence_c->input = 0;
+        sequence_c->output = 0;
+        sequence_c->u.command[0] = first_c;
+        sequence_c->u.command[1] = sequence_b;
+        first_c = sequence_c;
+    }
+    return first_c;
+}
+
+command_t parse_subshell_command(command_stream_t s){
+    
+    //Consume open parenthesis
+    if(next(s) != OPEN_P) {
+        error(1,0,"%d: Could not read script, expected \'(\'", s->line);
+    }
+    
+    //Parse inner command
+    command_t inner_c = parse_complete_command(s);
+    
+    //Consume newlines before close parenthesis
+    while(PEEK(s) == NEW_LINE) next(s);
+    
+    //Consume close parenthesis
+    if(next(s) != CLOSE_P) {
+        error(1,0,"%d: Could not read script, expected \')\'", s->line);
+    }
+    
+    //Now create the parsed command
+    command_t command = checked_malloc(sizeof(struct command));
+    command->type   = SUBSHELL_COMMAND;
+    command->status = -1;
+    command->input  = 0;
+    command->output = 0;
+    command->u.subshell_command = inner_c;
+    
+    return command;
+}
+
+//Parse commands
+command_t parse(command_stream_t s) {
+    while(PEEK(s) == NEW_LINE){
+        next(s);
+    }
+    
+    //Is it a subshell command?
+    if(PEEK(s) == OPEN_P) {
+        command_t subshell_c = parse_subshell_command(s);
+        if(PEEK(s) == IP_REDIRECT) {
+            //Consume the <
+            next(s);
+            if(next(s) != WORD) {
+                error(1,0,"%d: Could not read script, expected input argument",
+                        s->line);
+            }
+            subshell_c->input = checked_malloc(strlen(s->curr_str ) + 1);
+            strcpy(subshell_c->input, s->curr_str);
+        }
+        if(PEEK(s) == OP_REDIRECT) {
+            //Consume the >
+            next(s);
+            if(next(s) != WORD) {
+                error(1,0,"%d: Could not read script, expected input argument",
+                        s->line);
+            }
+            subshell_c->output = checked_malloc(strlen(s->curr_str ) + 1);
+            strcpy(subshell_c->output, s->curr_str);
+        }
+        return subshell_c;
+    }
+    return NULL;
+}
+
 command_t
 read_command_stream(command_stream_t s) {
     if (PEEK(s) == END)
         return NULL;
+    next(s);
     return 0;
 }
