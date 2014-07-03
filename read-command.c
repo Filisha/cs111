@@ -10,6 +10,9 @@
 #include <string.h>
 #include <stddef.h>
 
+//General function for parsing commands
+command_t parse(command_stream_t);
+
 //An invalid character to use as a null value
 #define NO_CHAR (-5)
 
@@ -379,5 +382,5 @@ read_command_stream(command_stream_t s) {
     if (PEEK(s) == END)
         return NULL;
     next(s);
-    return 0;
+    return parse_and_or_command(s);
 }
