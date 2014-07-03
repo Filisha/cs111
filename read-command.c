@@ -233,7 +233,21 @@ token_t next(command_stream_t s) {
 }
 
 command_t parse_piped_command(command_stream_t s){
-    return NULL;
+    command_t first_c = parse(s);
+    while(PEEK(s) == PIPE) {
+        next(s);
+        command_t second_c = parse(s);
+        command_t next_c = checked_malloc(sizeof(struct command));
+        
+        next_c->type = PIPE_COMMAND;
+        next_c->status = -1;
+        next_c->input = 0;
+        next_c->output = 0;
+        next_c->u.command[0] = first_c;
+        next_c->u.command[1] = second_c;
+        first_c = next_c;
+    }
+    return first_c;
 }
 
 command_t parse_and_or_command(command_stream_t s) {
@@ -241,9 +255,19 @@ command_t parse_and_or_command(command_stream_t s) {
     
     while(PEEK(s) == AND || PEEK(s) == OR) {
         token_t curr = next(s);
+        command_t second_c = parse_piped_command(s);
+        command_t next_c = checked_malloc(sizeof(struct command));
+        
+        next_c->type = curr == AND ? AND_COMMAND : OR_COMMAND;
+        next_c->status = -1;
+        next_c->input = 0;
+        next_c->output = 0;
+        next_c->u.command[0] = first_c;
+        next_c->u.command[1] = second_c;
+        first_c = next_c;
     }
     
-    return NULL;
+    return first_c;
 }
 
 command_t parse_complete_command(command_stream_t s){
@@ -324,8 +348,30 @@ command_t parse(command_stream_t s) {
             strcpy(subshell_c->output, s->curr_str);
         }
         return subshell_c;
+    } else {
+        command_t simple_c = checked_malloc(sizeof(struct command));
+        if(PEEK(s) == IP_REDIRECT) {
+            //Consume the <
+            next(s);
+            if(next(s) != WORD) {
+                error(1,0,"%d: Could not read script, expected input argument",
+                        s->line);
+            }
+            simple_c->input = checked_malloc(strlen(s->curr_str ) + 1);
+            strcpy(simple_c->input, s->curr_str);
+        }
+        if(PEEK(s) == OP_REDIRECT) {
+            //Consume the >
+            next(s);
+            if(next(s) != WORD) {
+                error(1,0,"%d: Could not read script, expected input argument",
+                        s->line);
+            }
+            simple_c->output = checked_malloc(strlen(s->curr_str ) + 1);
+            strcpy(simple_c->output, s->curr_str);
+        }
+        return simple_c;
     }
-    return NULL;
 }
 
 command_t

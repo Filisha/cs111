@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="89">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df root="C:/Users/Shubham/Documents/NetBeansProjects/cs111" name="cs111">
+    <df root="C:/Users/Shubham/Documents/lab1-Skeleton" name="lab1-Skeleton">
       <in>alloc.c</in>
       <in>alloc.h</in>
       <in>command-internals.h</in>
       <in>command.h</in>
       <in>execute-command.c</in>
       <in>main.c</in>
+      <in>print-command.c</in>
       <in>read-command.c</in>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
-      <itemPath>C:/Users/Shubham/Documents/NetBeansProjects/cs111/Makefile</itemPath>
+      <itemPath>C:/Users/Shubham/Documents/lab1-Skeleton/Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
   <sourceRootList>
-    <Elem>C:\Users\Shubham\Documents\NetBeansProjects\cs111</Elem>
+    <Elem>C:\Users\Shubham\Documents\lab1-Skeleton</Elem>
   </sourceRootList>
-  <projectmakefile>C:/Users/Shubham/Documents/NetBeansProjects/cs111/Makefile</projectmakefile>
+  <projectmakefile>C:/Users/Shubham/Documents/lab1-Skeleton/Makefile</projectmakefile>
   <confs>
     <conf name="Default" type="0">
       <toolsSet>
@@ -34,51 +35,80 @@
       </codeAssistance>
       <makefileType>
         <makeTool>
-          <buildCommandWorkingDir>C:/Users/Shubham/Documents/NetBeansProjects/cs111</buildCommandWorkingDir>
+          <buildCommandWorkingDir>C:/Users/Shubham/Documents/lab1-Skeleton</buildCommandWorkingDir>
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath></executablePath>
-          <cTool>
-            <incDir>
-              <pElem></pElem>
-            </incDir>
-          </cTool>
         </makeTool>
       </makefileType>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/alloc.c"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/alloc.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem>../../../../cygwin64/lib/gcc/i686-pc-cygwin/4.7.3/include</pElem>
+            <pElem></pElem>
+          </incDir>
+        </cTool>
       </item>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/alloc.h"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/alloc.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/command-internals.h"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/command-internals.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/command.h"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/command.h"
             ex="false"
             tool="3"
             flavor2="0">
       </item>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/execute-command.c"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/execute-command.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem></pElem>
+          </incDir>
+        </cTool>
       </item>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/main.c"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/main.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem>../../../../cygwin64/usr/include/sys</pElem>
+            <pElem>../../../../cygwin64/lib/gcc/i686-pc-cygwin/4.7.3/include</pElem>
+            <pElem>../../../../cygwin64/usr/include</pElem>
+            <pElem></pElem>
+          </incDir>
+        </cTool>
       </item>
-      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/read-command.c"
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/print-command.c"
             ex="false"
             tool="0"
-            flavor2="0">
+            flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem></pElem>
+          </incDir>
+        </cTool>
+      </item>
+      <item path="C:/Users/Shubham/Documents/lab1-Skeleton/read-command.c"
+            ex="false"
+            tool="0"
+            flavor2="2">
+        <cTool>
+          <incDir>
+            <pElem></pElem>
+          </incDir>
+        </cTool>
       </item>
     </conf>
   </confs>
