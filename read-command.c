@@ -2,9 +2,12 @@
 
 #include "command.h"
 #include "command-internals.h"
+#include "alloc.h"
 
 #include <error.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //When allocating memory, do so in blocks
 #define BLOCK_SIZE 16
@@ -25,7 +28,7 @@ make_command_stream(int (*get_next_byte) (void *),
     return 0;*/
 
     size_t buffer_s = 1024; //Hold these many characters
-    int buffer_pos = 0;
+    size_t buffer_pos = 0;
     int input_s = 0;
 
     char* input_buf = checked_malloc(buffer_s * sizeof (char));
