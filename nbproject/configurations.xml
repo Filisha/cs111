@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="89">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df root="C:/Users/Shubham/Documents/NetBeansProjects/cs111" name="cs111">
+      <in>alloc.c</in>
+      <in>alloc.h</in>
+      <in>command-internals.h</in>
+      <in>command.h</in>
+      <in>execute-command.c</in>
+      <in>main.c</in>
+      <in>read-command.c</in>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>C:/Users/Shubham/Documents/NetBeansProjects/cs111/Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>C:\Users\Shubham\Documents\NetBeansProjects\cs111</Elem>
+  </sourceRootList>
+  <projectmakefile>C:/Users/Shubham/Documents/NetBeansProjects/cs111/Makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>false</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <codeAssistance>
+      </codeAssistance>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>C:/Users/Shubham/Documents/NetBeansProjects/cs111</buildCommandWorkingDir>
+          <buildCommand>${MAKE} -f Makefile</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath></executablePath>
+          <cTool>
+            <incDir>
+              <pElem></pElem>
+            </incDir>
+          </cTool>
+        </makeTool>
+      </makefileType>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/alloc.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/alloc.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/command-internals.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/command.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/execute-command.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/main.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="C:/Users/Shubham/Documents/NetBeansProjects/cs111/read-command.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
