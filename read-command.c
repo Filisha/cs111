@@ -18,25 +18,24 @@
 #define PEEK(s) (s->next_tkn)
 
 //read a character from the stream
+
 char read(command_stream_t s) {
     char curr;
     //If the stream has a character, consume it
     if (s->next != NO_CHAR) {
         curr = s->next;
         s->next = NO_CHAR;
-    }
-    //Else directly read it in from getbyte
+    }//Else directly read it in from getbyte
     else
         curr = s->getbyte(s->arg);
     return curr;
 }
 
-void reallocate(command_stream_t s)
-{
+void reallocate(command_stream_t s) {
     s->token_s += 64;
-    
-    s->curr_str = checked_realloc(s->curr_str, s->token_s * sizeof(char));
-    s->next_str = checked_realloc(s->next_str, s->token_s * sizeof(char));
+
+    s->curr_str = checked_realloc(s->curr_str, s->token_s * sizeof (char));
+    s->next_str = checked_realloc(s->next_str, s->token_s * sizeof (char));
 }
 
 command_stream_t
@@ -62,14 +61,14 @@ make_command_stream(int (*get_next_byte) (void *),
     return stream;
 }
 
-bool iswordcharacter(char c){
+bool iswordcharacter(char c) {
     bool isnum = '0' <= c && c <= '9';
     bool isloweralpha = 'a' <= c && c <= 'z';
     bool isupperalpha = 'A' <= c && c <= 'Z';
     bool ispunct = c == '!' || c == '+' || c == '%' || c == '^' || c == '.' ||
-            c == '-' || c == ',' || c == '@' || c == '/' || 
+            c == '-' || c == ',' || c == '@' || c == '/' ||
             c == ':' || c == '_';
-    
+
     return isnum || isloweralpha || isupperalpha || ispunct;
 }
 
@@ -90,43 +89,61 @@ command_t next(command_stream_t s) {
         curr = read(s);
 
         //Break at end of file
-        if(curr == EOF || curr == NO_CHAR){
+        if (curr == EOF || curr == NO_CHAR) {
             s->next_tkn = END;
             break;
         }
+        
         //Ignore leading whitespace
         else if (curr == ' ' || curr == '\t') continue;
+
         //Ignore comments
-        else if (curr == '#'){
-            while((curr = read(s)) != '\n') continue;
-            s->next = curr;//do not ignore the newline character
+        else if (curr == '#') {
+            while ((curr = read(s)) != '\n') continue;
+            s->next = curr; //do not ignore the newline character
         }
-        else if (iswordcharacter(curr)){
+        
+        //Read a word
+        else if (iswordcharacter(curr)) {
             next[pos] = curr;
+            pos++;
             //Consume characters until token ends
-            while(char = read(s))
-            {
-                if(!iswordcharacter(curr))
-                {
-                    s->next = curr;//do not skip the current character
+            while (char = read(s)) {
+                if (!iswordcharacter(curr)) {
+                    s->next = curr; //do not skip the current character
                     break;
                 }
-                if(pos >= s->token_s)
-                {
+                if (pos >= s->token_s) {
                     reallocate(s);
                     next = s->next_str;
                 }
                 next[pos] = curr;
                 pos++;
             }
-            if(pos >= s->token_s)
-            {
+            //Reallocate if necessary, and add the terminal 0
+            if (pos >= s->token_s) {
                 reallocate(s);
                 next = s->next_str;
             }
             next[pos] = 0;
             s->next_tkn = WORD;
             break;
+        }
+        
+        //Read an AND (&&) command
+        else if (curr == '&') {
+            next[pos] = curr;
+            pos++;
+            if ((curr = read(s)) != '&') {
+                error(1, 0, "%d: Found invalid character, lone &");
+                break;
+            } else {
+                next[pos] = curr;
+                pos++;
+                next[pos] = 0;
+                s->next_tkn = AND;
+                break;
+            }
         }
     }
 }
