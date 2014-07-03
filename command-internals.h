@@ -22,7 +22,7 @@ enum command_type
       GREATER,
       SEMI_COLON,
       NEW_LINE,
-      EOF
+      END
   }token_t;
 
 // Data associated with a command.
@@ -56,7 +56,7 @@ struct command_stream{
     void* arg;
     
     //next character
-    int next;
+    char next;
     
     //line number
     int line;

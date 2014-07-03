@@ -2,6 +2,18 @@
 <configurationDescriptor version="89">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="C:/Users/Shubham/Documents/NetBeansProjects/cs111" name="cs111">
+      <df name="project.xcworkspace">
+        <df name="xcuserdata">
+          <df name="derekfoster.xcuserdatad">
+          </df>
+        </df>
+      </df>
+      <df name="xcuserdata">
+        <df name="derekfoster.xcuserdatad">
+          <df name="xcschemes">
+          </df>
+        </df>
+      </df>
       <in>alloc.c</in>
       <in>alloc.h</in>
       <in>command-internals.h</in>
