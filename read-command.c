@@ -350,7 +350,7 @@ command_t parse(command_stream_t s) {
             //Consume the >
             next(s);
             if(next(s) != WORD) {
-                error(1,0,"%d: Could not read script, expected input argument",
+                error(1,0,"%d: Could not read script, expected output argument",
                         s->line);
             }
             subshell_c->output = checked_malloc(strlen(s->curr_str ) + 1);
@@ -373,7 +373,7 @@ command_t parse(command_stream_t s) {
             //Consume the >
             next(s);
             if(next(s) != WORD) {
-                error(1,0,"%d: Could not read script, expected input argument",
+                error(1,0,"%d: Could not read script, expected output argument",
                         s->line);
             }
             simple_c->output = checked_malloc(strlen(s->curr_str ) + 1);
