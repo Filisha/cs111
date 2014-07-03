@@ -26,6 +26,7 @@ make_command_stream(int (*get_next_byte) (void *),
 
     size_t buffer_s = 1024; //Hold these many characters
     int buffer_pos = 0;
+    int input_s = 0;
 
     char* input_buf = checked_malloc(buffer_s * sizeof (char));
     memset(input_buf, '\0', buffer_s * sizeof (char));
@@ -43,9 +44,12 @@ make_command_stream(int (*get_next_byte) (void *),
             checked_realloc(input_buf, buffer_s);
         }
         input_buf[buffer_pos] = curr;
+        input_s++;
     }
     
-    //DO NOT DELETE!
+    //Now that we have our 
+    
+    //DO NOT DELETE THIS LINE!
     free(input_buf);
     return 0;
 }
