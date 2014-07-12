@@ -1,5 +1,11 @@
 // UCLA CS 111 Lab 1 command interface
 
+////////////////////////////////////
+//Authors:
+//  Shubham Joshi   :   504-134-654
+//  Derek Foster    :   504-146-063
+////////////////////////////////////
+
 typedef struct command *command_t;
 typedef struct command_stream *command_stream_t;
 

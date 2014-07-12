@@ -1,0 +1,27 @@
+CS 111, Sp14 Lab 1
+
+Shubham Joshi   :   504-134-654
+Derek Foster    :   504-146-063
+
+Division of work for 1A:
+Shubham Joshi:
+    read-command.c:
+        NO_CHAR
+        PEEK
+        read
+        reallocate
+        make_command_stream
+        next
+    command-internals.h:
+        struct token_type
+Derek Foster:
+    read-command.c:
+        iswordcharacter
+        parse
+        parse_piped_command
+        parse_and_or_command
+        parse_complete_command
+        parse_subshell_command
+        read_command_stream
+    command-internals.h:
+        struct command_stream
