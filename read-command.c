@@ -10,6 +10,9 @@
 #include <string.h>
 #include <stddef.h>
 
+//A general command parser
+command_t parse(command_stream_t);
+
 //An invalid character to use as a null value
 #define NO_CHAR (-5)
 
@@ -233,7 +236,21 @@ token_t next(command_stream_t s) {
 }
 
 command_t parse_piped_command(command_stream_t s){
-    return NULL;
+    command_t first_c = parse(s);
+    while(PEEK(s) == PIPE){
+        next(s);
+        command_t second_c = parse(s);
+        command_t pipe_c = checked_malloc(sizeof(struct command));
+        
+        pipe_c->type = PIPE_COMMAND;
+        pipe_c->status = -1;
+        pipe_c->input = 0;
+        pipe_c->output = 0;
+        pipe_c->u.command[0] = first_c;
+        pipe_c->u.command[1] = second_c;
+        first_c = pipe_c;
+    }
+    return first_c;
 }
 
 command_t parse_and_or_command(command_stream_t s) {
@@ -241,9 +258,19 @@ command_t parse_and_or_command(command_stream_t s) {
     
     while(PEEK(s) == AND || PEEK(s) == OR) {
         token_t curr = next(s);
+        command_t second_c = parse_piped_command(s);
+        command_t next_c = checked_malloc(sizeof(struct command));
+        
+        next_c->type         = curr == AND ? AND_COMMAND : OR_COMMAND;
+        next_c->status       = -1;
+        next_c->input        = 0;
+        next_c->output       = 0;
+        next_c->u.command[0] = first_c;
+        next_c->u.command[1] = second_c;
+        first_c = next_c;
     }
     
-    return NULL;
+    return first_c;
 }
 
 command_t parse_complete_command(command_stream_t s){
@@ -252,14 +279,14 @@ command_t parse_complete_command(command_stream_t s){
     while(PEEK(s) == NEW_LINE || PEEK(s) == SEMICOLON) {
         next(s);
         if(PEEK(s) == END) break;
-        command_t sequence_b = parse_and_or_command(s);
+        command_t second_c = parse_and_or_command(s);
         command_t sequence_c = checked_malloc(sizeof(struct command));
-        sequence_c->type = SEQUENCE_COMMAND;
-        sequence_c->status = -1;
-        sequence_c->input = 0;
-        sequence_c->output = 0;
+        sequence_c->type         = SEQUENCE_COMMAND;
+        sequence_c->status       = -1;
+        sequence_c->input        = 0;
+        sequence_c->output       = 0;
         sequence_c->u.command[0] = first_c;
-        sequence_c->u.command[1] = sequence_b;
+        sequence_c->u.command[1] = second_c;
         first_c = sequence_c;
     }
     return first_c;
@@ -333,5 +360,5 @@ read_command_stream(command_stream_t s) {
     if (PEEK(s) == END)
         return NULL;
     next(s);
-    return 0;
+    return parse_and_or_command(s);
 }
