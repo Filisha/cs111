@@ -138,7 +138,7 @@ token_t next(command_stream_t s) {
             next[pos] = curr;
             pos++;
             if ((curr = read(s)) != '&') {
-                error(1, 0, "%d: Found invalid character, lone &");
+                error(1, 0, "%d: Found invalid character, lone &", s->line);
                 break;
             } else {
                 next[pos] = curr;
