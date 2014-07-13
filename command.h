@@ -26,9 +26,11 @@ command_t read_command_stream (command_stream_t stream);
 /* Print a command to stdout, for debugging.  */
 void print_command (command_t);
 
-/* Execute a command.  Use "time travel" if the integer flag is
-   nonzero.  */
-void execute_command (command_t, int);
+/* Execute a command.*/
+void execute_command (command_t);
+
+/*Execute in time travel mode*/
+void execute_command_t(command_t);
 
 /* Return the exit status of a command, which must have previously been executed.
    Wait for the command, if it is not already finished.  */
